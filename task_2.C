@@ -84,7 +84,7 @@
 
     //scaling histogram
     hist_3->Scale(h3_scale);
-    
+
     hist_3->Draw("samehist");
     hist_3->SetFillStyle(3001);
     hist_3->SetFillColor(kRed);
@@ -95,12 +95,17 @@
 
     TH1D* hist_4 = (TH1D*)hist_4_temp->ProjectionY();
 
-    hist_4->SetNormFactor(hist_2->GetEntries() - hist_3->GetEntries()); //normalizing simulation histogram to the number of singal events in real experiment
+    Double_t hist_4_scale = (hist_2->GetEntries() - hist_3->GetEntries())/hist_4->GetEntries();
+
+    hist_4->Scale(hist_4_scale); //normalizing simulation histogram to the number of singal events in real experiment
 
     TH1D* hist_5 = new TH1D("hist_5", "hist_5", n_bins_y, y_lower_limit, y_upper_limit);
 
     hist_5->Add(hist_3, hist_4);
     
+    hist_4->SetNormFactor(hist_2->GetEntries() - hist_3->GetEntries());
+    hist_4->Draw("histsame");
+
     hist_5->Draw("histsame");
     hist_5->SetFillStyle(3001);
     hist_5->SetFillColor(kYellow);
